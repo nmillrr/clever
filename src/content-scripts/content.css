@@ -2,15 +2,14 @@
  * Academic Access Extension - Content Styles
  * 
  * Styles for the extension's UI elements that are injected into websites.
- * These styles are isolated with specific class names to avoid conflicts.
+ * These styles are integrated with Radix UI themes.
  */
+
+/* Import Radix UI themes */
+@import url('node_modules/@radix-ui/themes/styles.css');
 
 /* Container for all extension UI elements */
 .academic-access-container {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #333;
   z-index: 2147483647; /* Highest z-index to ensure visibility */
   position: fixed;
   bottom: 20px;
@@ -18,19 +17,7 @@
   width: 320px;
   max-width: 90vw;
   box-sizing: border-box;
-}
-
-/* Base notification styles */
-.academic-access-notification {
-  background-color: #fff;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-left: 4px solid #2c6bed;
+  font-family: var(--font-family);
   transition: opacity 0.3s ease, transform 0.3s ease;
   animation: academic-access-slide-in 0.3s ease;
 }
@@ -57,7 +44,7 @@
 .academic-access-logo {
   width: 32px;
   height: 32px;
-  background-color: #2c6bed;
+  background-color: var(--accent-9);
   border-radius: 50%;
   background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI1MCIgZmlsbD0iIzJjNmJlZCIvPjxwYXRoIGQ9Ik0zMCA3MEg3ME02NSAzMEw1MCA3ME0zNSAzMEw1MCA3MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=');
   background-size: contain;
@@ -66,11 +53,24 @@
   align-self: flex-start;
 }
 
+/* Base notification styles - using Radix Card */
+.academic-access-notification {
+  background-color: var(--color-panel);
+  border-radius: var(--radius-4);
+  box-shadow: var(--shadow-5);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-left: 4px solid var(--accent-9);
+}
+
 /* Message text styling */
 .academic-access-message {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #333;
+  font-size: var(--font-size-2);
+  line-height: var(--line-height-2);
+  color: var(--gray-12);
 }
 
 /* Actions container styling */
@@ -78,26 +78,28 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 8px;
+  margin-top: var(--space-2);
 }
 
-/* Button styling */
+/* Button styling - using Radix Button */
 .academic-access-button {
-  display: inline-block;
-  background-color: #2c6bed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-9);
   color: white;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-2);
   text-decoration: none;
-  font-size: 14px;
+  font-size: var(--font-size-2);
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .academic-access-button:hover {
-  background-color: #1d5cdb;
+  background-color: var(--accent-10);
   text-decoration: none;
   color: white;
 }
@@ -106,22 +108,19 @@
 .academic-access-dismiss {
   background: none;
   border: none;
-  color: #666;
+  color: var(--gray-9);
   cursor: pointer;
-  font-size: 16px;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-2);
   transition: background-color 0.2s ease;
 }
 
 .academic-access-dismiss:hover {
-  background-color: #f1f1f1;
-  color: #333;
+  background-color: var(--gray-3);
+  color: var(--gray-12);
 }
 
-/* Additional UI elements */
-
-/* Floating access button */
+/* Floating access button - using Radix styling */
 .academic-access-floating-button {
   position: fixed;
   bottom: 20px;
@@ -129,12 +128,12 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: #2c6bed;
+  background-color: var(--accent-9);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-3);
   cursor: pointer;
   z-index: 2147483646; /* One less than container */
   transition: transform 0.2s ease, background-color 0.2s ease;
@@ -142,44 +141,44 @@
 
 .academic-access-floating-button:hover {
   transform: scale(1.05);
-  background-color: #1d5cdb;
+  background-color: var(--accent-10);
 }
 
 /* Info box styling */
 .academic-access-info-box {
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 12px;
-  margin-top: 8px;
-  font-size: 13px;
-  color: #555;
+  background-color: var(--gray-2);
+  border: 1px solid var(--gray-6);
+  border-radius: var(--radius-3);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--font-size-1);
+  color: var(--gray-11);
 }
 
-/* Alert styles */
+/* Alert styles - using Radix Callout styling */
 .academic-access-alert {
-  padding: 12px;
-  border-radius: 4px;
-  margin-bottom: 12px;
-  font-size: 13px;
+  padding: var(--space-3);
+  border-radius: var(--radius-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-1);
 }
 
 .academic-access-alert-info {
-  background-color: #e3f2fd;
-  color: #0d47a1;
-  border: 1px solid #bbdefb;
+  background-color: var(--blue-3);
+  color: var(--blue-11);
+  border: 1px solid var(--blue-6);
 }
 
 .academic-access-alert-success {
-  background-color: #e8f5e9;
-  color: #1b5e20;
-  border: 1px solid #c8e6c9;
+  background-color: var(--green-3);
+  color: var(--green-11);
+  border: 1px solid var(--green-6);
 }
 
 .academic-access-alert-warning {
-  background-color: #fff3e0;
-  color: #e65100;
-  border: 1px solid #ffe0b2;
+  background-color: var(--amber-3);
+  color: var(--amber-11);
+  border: 1px solid var(--amber-6);
 }
 
 /* Responsive adjustments for small screens */
@@ -192,39 +191,18 @@
   }
   
   .academic-access-notification {
-    padding: 12px;
+    padding: var(--space-3);
   }
   
   .academic-access-button {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--font-size-1);
   }
 }
 
-/* Avoid messing up dark mode sites */
-@media (prefers-color-scheme: dark) {
-  .academic-access-notification,
-  .academic-access-info-box {
-    background-color: #292929;
-    color: #eee;
-  }
-  
-  .academic-access-message {
-    color: #eee;
-  }
-  
-  .academic-access-dismiss {
-    color: #aaa;
-  }
-  
-  .academic-access-dismiss:hover {
-    background-color: #333;
-    color: #fff;
-  }
-  
-  .academic-access-info-box {
-    background-color: #333;
-    border-color: #444;
-    color: #ccc;
-  }
+/* Radix automatically handles dark mode, but we'll add a specific override */
+.academic-access-container[data-theme="dark"] .academic-access-notification,
+.academic-access-container[data-theme="dark"] .academic-access-info-box {
+  /* Dark mode is handled by Radix automatically */
+  color-scheme: dark;
 }

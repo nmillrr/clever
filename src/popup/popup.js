@@ -2,7 +2,10 @@
  * Academic Access Extension - Popup Script
  * 
  * Handles the UI interactions for the extension popup interface.
+ * Uses Radix UI for theming and components.
  */
+
+import '@radix-ui/themes/styles.css';
 
 // University proxy data
 const UNIVERSITIES = {
@@ -276,7 +279,7 @@ function handleReset() {
  */
 function showAlert(message, type = 'info') {
   elements.alertMessage.textContent = message;
-  elements.alertBox.className = `alert alert-${type}`;
+  elements.alertBox.className = `rt-CalloutRoot ${type === 'success' ? 'variant="success"' : ''}`;
   elements.alertBox.classList.remove('hidden');
   
   // Hide after 5 seconds

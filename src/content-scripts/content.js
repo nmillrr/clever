@@ -3,7 +3,10 @@
  * 
  * This script runs on supported publisher websites to detect paywalls
  * and offer institutional access alternatives.
+ * Uses Radix UI for consistent theming.
  */
+
+import '@radix-ui/themes/styles.css';
 
 (function() {
   // Extension state
@@ -249,13 +252,14 @@
     // Create container if it doesn't exist
     if (!elements.container) {
       elements.container = document.createElement('div');
-      elements.container.className = 'academic-access-container';
+      elements.container.className = 'academic-access-container radix-themes';
+      elements.container.setAttribute('data-theme', 'light');
       document.body.appendChild(elements.container);
     }
     
     // Create notification
     elements.notification = document.createElement('div');
-    elements.notification.className = 'academic-access-notification';
+    elements.notification.className = 'academic-access-notification rt-Card';
     
     // Generate proxied URL
     const proxiedUrl = generateProxiedUrl();
@@ -263,16 +267,22 @@
     if (proxiedUrl) {
       // Create notification content
       elements.notification.innerHTML = `
-        <div class="academic-access-logo"></div>
-        <div class="academic-access-message">
-          <strong>Academic Access:</strong> 
-          You may have access to this article through ${state.institution.name}.
-        </div>
-        <div class="academic-access-actions">
-          <a href="${proxiedUrl}" class="academic-access-button" target="_blank">
-            Access via Institution
-          </a>
-          <button class="academic-access-dismiss">✕</button>
+        <div class="rt-Flex direction="column" gap="2">
+          <div class="rt-Flex align="center" gap="2">
+            <div class="academic-access-logo"></div>
+            <span class="rt-Text weight="bold" size="3">Academic Access</span>
+          </div>
+          <div class="rt-Text size="2">
+            You may have access to this article through ${state.institution.name}.
+          </div>
+          <div class="rt-Flex justify="between" align="center" mt="2">
+            <a href="${proxiedUrl}" class="rt-Button" target="_blank">
+              Access via Institution
+            </a>
+            <button class="rt-IconButton variant="ghost" academic-access-dismiss">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            </button>
+          </div>
         </div>
       `;
       
@@ -280,7 +290,7 @@
       elements.container.appendChild(elements.notification);
       
       // Add event listeners
-      const dismissButton = elements.notification.querySelector('.academic-access-dismiss');
+      const dismissButton = elements.notification.querySelector('[academic-access-dismiss]');
       if (dismissButton) {
         dismissButton.addEventListener('click', function() {
           elements.notification.remove();

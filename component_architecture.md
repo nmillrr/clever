@@ -395,6 +395,11 @@ Provides platform-agnostic abstractions to support:
 ```
 extension/
 ├── manifest.json
+├── package.json
+├── webpack.config.js
+├── node_modules/
+│   └── @radix-ui/
+│       └── themes/
 ├── background/
 │   ├── index.js
 │   ├── services/
@@ -419,3 +424,31 @@ extension/
     ├── images/
     └── styles/
 ```
+
+## 11. UI Framework
+
+The extension uses Radix UI as its component library and styling system, providing several advantages:
+
+### 11.1 Radix UI Integration
+
+```
+┌────────────────────────────────────────────────────────────┐
+│                     Radix UI Components                     │
+├────────────────────────────────────────────────────────────┤
+│ ┌────────────────┐ ┌────────────────┐ ┌─────────────────┐  │
+│ │ Themes         │ │ Components     │ │ Layout System   │  │
+│ └────────────────┘ └────────────────┘ └─────────────────┘  │
+└────────────────────────────────────────────────────────────┘
+```
+
+- **Themes**: Provides consistent design tokens and color schemes
+- **Components**: Accessible, customizable UI primitives
+- **Layout System**: Responsive flex layouts with consistent spacing
+
+### 11.2 Benefits
+
+- **Accessibility**: First-class accessibility support built-in
+- **Theming**: Dark/light mode with minimal configuration
+- **Consistency**: Uniform design language across all UI elements
+- **Responsiveness**: Adapts to different screen sizes and contexts
+- **Maintainability**: Reduced CSS complexity and improved component reuse

@@ -84,7 +84,8 @@
     {
       "resources": [
         "assets/*",
-        "src/modules/*"
+        "src/modules/*",
+        "node_modules/@radix-ui/themes/styles.css"
       ],
       "matches": ["<all_urls>"]
     }

@@ -3,9 +3,11 @@
  * 
  * Creates and manages the floating "Access via your library" button
  * that appears on paywalled pages.
+ * Uses Radix UI for consistent theming.
  */
 
 import { accessViaLibrary } from '../modules/proxy-redirect.js';
+import '@radix-ui/themes/styles.css';
 
 /**
  * Default configuration
@@ -16,9 +18,7 @@ const DEFAULT_CONFIG = {
   autoHideDelay: 5000,             // Time in ms before auto-hiding
   displayType: 'button',           // 'button' or 'notification'
   showIcon: true,                  // Whether to show the icon
-  textColor: '#ffffff',            // Text color
-  backgroundColor: '#2c6bed',      // Background color
-  hoverColor: '#1d5cdb',           // Background color on hover
+  colorScheme: 'light',            // 'light' or 'dark'
   zIndex: 2147483646               // z-index to ensure visibility (max - 1)
 };
 
@@ -90,15 +90,13 @@ class AccessButton {
     // Create container if it doesn't exist
     if (!this.elements.container) {
       this.elements.container = document.createElement('div');
-      this.elements.container.className = 'academic-access-container';
+      this.elements.container.className = 'academic-access-container radix-themes';
+      this.elements.container.setAttribute('data-theme', this.config.colorScheme);
       this.elements.container.style.cssText = `
         position: fixed;
         ${this.config.buttonPosition.includes('bottom') ? 'bottom: 20px;' : 'top: 20px;'}
         ${this.config.buttonPosition.includes('right') ? 'right: 20px;' : 'left: 20px;'}
         z-index: ${this.config.zIndex};
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
         box-sizing: border-box;
       `;
       document.body.appendChild(this.elements.container);
@@ -117,24 +115,15 @@ class AccessButton {
    */
   createFloatingButton() {
     this.elements.button = document.createElement('button');
-    this.elements.button.className = 'academic-access-button';
+    this.elements.button.className = 'academic-access-button rt-Button';
     this.elements.button.setAttribute('aria-label', 'Access via your library');
     
     this.elements.button.style.cssText = `
       display: ${this.state.isVisible ? 'flex' : 'none'};
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      background-color: ${this.config.backgroundColor};
-      color: ${this.config.textColor};
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.2s ease;
+      gap: var(--space-2);
+      box-shadow: var(--shadow-3);
     `;
     
     // Create button content
@@ -144,10 +133,11 @@ class AccessButton {
     // Add icon if enabled
     if (this.config.showIcon) {
       const icon = document.createElement('span');
+      icon.classList.add('rt-Icon');
       icon.style.cssText = `
         width: 16px;
         height: 16px;
-        background-color: ${this.config.textColor};
+        background-color: currentColor;
         mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptMCAxOGMtNC40MSAwLTgtMy41OS04LThzMy41OS04IDgtOCA4IDMuNTkgOCA4LTMuNTkgOC04IDh6bTMuNS03Yy45NCAwIDEuNy0uNzYgMS43LTEuN3MtLjc2LTEuNy0xLjctMS43LTEuNy43Ni0xLjcgMS43LjQyIDEuNyAxLjcgMS43em0tNy01LjNjLS45NCAwLTEuNy43Ni0xLjcgMS43cy43NiAxLjcgMS43IDEuNyAxLjctLjc2IDEuNy0xLjdjMC0xLjExLS43Ni0xLjctMS43LTEuN3ptMS43IDguOFY5LjdoLjdWNi40M2MwLS4zOS0uMy0uNjMtLjctLjYzLS4yNSAwLS41LjE1LS42LjM0bC0zLjEgNS4wOWMtLjE1LjI0LS4xLjYuMi44LjIuMTUuNC4yLjUuMmgydi44YzAgLjQwMi4zMDIuNy43LjcuNDEgMCAuNy0uMyA3LS42OTV6IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48L3N2Zz4=');
         -webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptMCAxOGMtNC40MSAwLTgtMy41OS04LThzMy41OS04IDgtOCA4IDMuNTkgOCA4LTMuNTkgOC04IDh6bTMuNS03Yy45NCAwIDEuNy0uNzYgMS43LTEuN3MtLjc2LTEuNy0xLjctMS43LTEuNy43Ni0xLjcgMS43LjQyIDEuNyAxLjcgMS43em0tNy01LjNjLS45NCAwLTEuNy43Ni0xLjcgMS43cy43NiAxLjcgMS43IDEuNyAxLjctLjc2IDEuNy0xLjdjMC0xLjExLS43Ni0xLjctMS43LTEuN3ptMS43IDguOFY5LjdoLjdWNi40M2MwLS4zOS0uMy0uNjMtLjctLjYzLS4yNSAwLS41LjE1LS42LjM0bC0zLjEgNS4wOWMtLjE1LjI0LS4xLjYuMi44LjIuMTUuNC4yLjUuMmgydi44YzAgLjQwMi4zMDIuNy43LjcuNDEgMCAuNy0uMyA3LS42OTV6IiBmaWxsPSJjdXJyZW50Q29sb3IiLz48L3N2Zz4=');
         -webkit-mask-size: cover;
@@ -158,15 +148,6 @@ class AccessButton {
     
     this.elements.button.appendChild(buttonContent);
     this.elements.container.appendChild(this.elements.button);
-    
-    // Add hover effect
-    this.elements.button.addEventListener('mouseenter', () => {
-      this.elements.button.style.backgroundColor = this.config.hoverColor;
-    });
-    
-    this.elements.button.addEventListener('mouseleave', () => {
-      this.elements.button.style.backgroundColor = this.config.backgroundColor;
-    });
   }
 
   /**
@@ -174,16 +155,11 @@ class AccessButton {
    */
   createNotification() {
     this.elements.notification = document.createElement('div');
-    this.elements.notification.className = 'academic-access-notification';
+    this.elements.notification.className = 'academic-access-notification rt-Card';
     this.elements.notification.style.cssText = `
       display: ${this.state.isVisible ? 'flex' : 'none'};
       flex-direction: column;
-      gap: 12px;
-      background-color: white;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      padding: 16px;
-      border-left: 4px solid ${this.config.backgroundColor};
+      gap: var(--space-3);
       max-width: 320px;
       animation: academic-access-slide-in 0.3s ease;
       transition: opacity 0.3s ease, transform 0.3s ease;
@@ -209,59 +185,34 @@ class AccessButton {
     `;
     document.head.appendChild(style);
     
-    // Create notification content
+    // Create notification content using Radix UI classes
     const content = document.createElement('div');
-    content.style.cssText = `
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    `;
+    content.className = 'rt-Flex direction="column" gap="2"';
     
     // Add title with icon
     const title = document.createElement('div');
-    title.style.cssText = `
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      color: #333;
-    `;
+    title.className = 'rt-Flex align="center" gap="2"';
     
     if (this.config.showIcon) {
       const icon = document.createElement('div');
-      icon.style.cssText = `
-        width: 20px;
-        height: 20px;
-        background-color: ${this.config.backgroundColor};
-        border-radius: 50%;
-        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI1MCIgZmlsbD0iIzJjNmJlZCIvPjxwYXRoIGQ9Ik0zMCA3MEg3ME02NSAzMEw1MCA3ME0zNSAzMEw1MCA3MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-      `;
+      icon.className = 'academic-access-logo';
       title.appendChild(icon);
     }
     
     const titleText = document.createElement('span');
+    titleText.className = 'rt-Text weight="bold" size="3"';
     titleText.textContent = 'Academic Access';
     title.appendChild(titleText);
     
     // Add message
     const message = document.createElement('div');
-    message.style.cssText = `
-      font-size: 14px;
-      color: #333;
-      line-height: 1.5;
-    `;
+    message.className = 'rt-Text size="2"';
     message.textContent = 'You may have access to this content through your institution.';
     
     // Add institution name if available
     if (this.state.institution && this.state.institution.name) {
       const institutionInfo = document.createElement('div');
-      institutionInfo.style.cssText = `
-        font-size: 13px;
-        color: #666;
-      `;
+      institutionInfo.className = 'rt-Text size="1" color="gray"';
       institutionInfo.textContent = `Using: ${this.state.institution.name}`;
       content.appendChild(title);
       content.appendChild(message);
@@ -275,60 +226,17 @@ class AccessButton {
     
     // Add action buttons
     const actions = document.createElement('div');
-    actions.style.cssText = `
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 8px;
-    `;
+    actions.className = 'rt-Flex justify="between" align="center" mt="2"';
     
     // Access button
     const accessButton = document.createElement('button');
-    accessButton.className = 'academic-access-action-button';
+    accessButton.className = 'rt-Button';
     accessButton.textContent = 'Access via Institution';
-    accessButton.style.cssText = `
-      background-color: ${this.config.backgroundColor};
-      color: ${this.config.textColor};
-      border: none;
-      border-radius: 4px;
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    `;
     
     // Dismiss button
     const dismissButton = document.createElement('button');
-    dismissButton.className = 'academic-access-dismiss';
-    dismissButton.textContent = '✕';
-    dismissButton.style.cssText = `
-      background: none;
-      border: none;
-      color: #666;
-      cursor: pointer;
-      font-size: 16px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background-color 0.2s ease;
-    `;
-    
-    // Add hover effects
-    accessButton.addEventListener('mouseenter', () => {
-      accessButton.style.backgroundColor = this.config.hoverColor;
-    });
-    
-    accessButton.addEventListener('mouseleave', () => {
-      accessButton.style.backgroundColor = this.config.backgroundColor;
-    });
-    
-    dismissButton.addEventListener('mouseenter', () => {
-      dismissButton.style.backgroundColor = '#f1f1f1';
-    });
-    
-    dismissButton.addEventListener('mouseleave', () => {
-      dismissButton.style.backgroundColor = 'transparent';
-    });
+    dismissButton.className = 'rt-IconButton variant="ghost"';
+    dismissButton.innerHTML = '<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03164 3.2184C3.80708 2.99385 3.44301 2.99385 3.21846 3.2184C2.99391 3.44295 2.99391 3.80702 3.21846 4.03157L6.68688 7.49999L3.21846 10.9684C2.99391 11.193 2.99391 11.557 3.21846 11.7816C3.44301 12.0061 3.80708 12.0061 4.03164 11.7816L7.50005 8.31316L10.9685 11.7816C11.193 12.0061 11.5571 12.0061 11.7816 11.7816C12.0062 11.557 12.0062 11.193 11.7816 10.9684L8.31322 7.49999L11.7816 4.03157Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>';
     
     actions.appendChild(accessButton);
     actions.appendChild(dismissButton);

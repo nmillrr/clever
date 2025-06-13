@@ -4,42 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Academic Access Extension</title>
+  <link rel="stylesheet" href="node_modules/@radix-ui/themes/styles.css">
   <style>
-    :root {
-      --primary-color: #2c6bed;
-      --primary-dark: #1d5cdb;
-      --secondary-color: #f1f5fa;
-      --success-color: #4caf50;
-      --danger-color: #f44336;
-      --text-color: #333;
-      --text-light: #666;
-      --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      --border-radius: 4px;
-      --transition: all 0.3s ease;
+    .hidden {
+      display: none;
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       width: 360px;
       margin: 0;
-      padding: 16px;
-      color: var(--text-color);
-      font-size: 14px;
-      line-height: 1.5;
-      background-color: #fff;
-    }
-    
-    h1 {
-      font-size: 18px;
-      margin-top: 0;
-      margin-bottom: 16px;
-      text-align: center;
-      color: var(--primary-color);
+      padding: 0;
+      font-family: var(--default-font-family);
     }
     
     .logo {
       text-align: center;
-      margin-bottom: 16px;
+      margin: 16px 0;
     }
     
     .logo img {
@@ -47,239 +27,9 @@
       width: auto;
     }
     
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .card {
-      background-color: #fff;
-      border-radius: var(--border-radius);
-      padding: 16px;
-      box-shadow: var(--box-shadow);
-    }
-    
-    .form-group {
-      margin-bottom: 16px;
-    }
-    
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    
-    .input-group {
-      position: relative;
-    }
-    
-    .input-group .icon {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-light);
-    }
-    
-    select,
-    input[type="text"] {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: var(--border-radius);
-      font-size: 14px;
-      transition: var(--transition);
-      box-sizing: border-box;
-    }
-    
-    select:focus,
-    input[type="text"]:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(44, 107, 237, 0.2);
-    }
-    
-    .btn {
-      display: inline-block;
-      background-color: var(--primary-color);
-      color: white;
-      padding: 8px 16px;
-      border: none;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
-      transition: var(--transition);
-    }
-    
-    .btn:hover {
-      background-color: var(--primary-dark);
-    }
-    
-    .btn-block {
-      display: block;
-      width: 100%;
-    }
-    
-    .btn-outline {
-      background-color: transparent;
-      border: 1px solid var(--primary-color);
-      color: var(--primary-color);
-    }
-    
-    .btn-outline:hover {
-      background-color: var(--primary-color);
-      color: white;
-    }
-    
-    .btn-danger {
-      background-color: var(--danger-color);
-    }
-    
-    .btn-danger:hover {
-      background-color: #d32f2f;
-    }
-    
-    .btn-sm {
-      padding: 4px 8px;
-      font-size: 12px;
-    }
-    
-    .btn-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    
-    .alert {
-      padding: 12px;
-      border-radius: var(--border-radius);
-      margin-bottom: 16px;
-    }
-    
-    .alert-success {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-      border: 1px solid #c8e6c9;
-    }
-    
-    .alert-info {
-      background-color: #e3f2fd;
-      color: #1565c0;
-      border: 1px solid #bbdefb;
-    }
-    
-    .hidden {
-      display: none;
-    }
-    
-    .text-center {
-      text-align: center;
-    }
-    
-    .mt-16 {
-      margin-top: 16px;
-    }
-    
-    .actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-    
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      padding: 8px;
-      border-radius: var(--border-radius);
-      background-color: var(--secondary-color);
-    }
-    
-    .status-indicator .icon {
-      font-size: 16px;
-    }
-    
-    .status-indicator.active {
-      background-color: #e8f5e9;
-    }
-    
-    .status-indicator.active .icon {
-      color: var(--success-color);
-    }
-    
-    /* Tabs */
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid #ddd;
-      margin-bottom: 16px;
-    }
-    
-    .tab {
-      padding: 8px 16px;
-      cursor: pointer;
-      font-weight: 500;
-      color: var(--text-light);
-      border-bottom: 2px solid transparent;
-    }
-    
-    .tab.active {
-      color: var(--primary-color);
-      border-bottom-color: var(--primary-color);
-    }
-    
-    /* Settings Section */
-    #settings-section {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    
-    .institution-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px;
-      background-color: var(--secondary-color);
-      border-radius: var(--border-radius);
-    }
-    
-    .institution-info {
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .institution-name {
-      font-weight: 500;
-    }
-    
-    .institution-url {
-      font-size: 12px;
-      color: var(--text-light);
-    }
-    
-    /* Custom University Form */
-    #custom-form {
-      margin-top: 16px;
-      border-top: 1px solid #eee;
-      padding-top: 16px;
-    }
-    
-    .toggle-link {
-      color: var(--primary-color);
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 13px;
-    }
-    
-    /* Loading spinner */
     .spinner {
       border: 2px solid rgba(0, 0, 0, 0.1);
-      border-top: 2px solid var(--primary-color);
+      border-top: 2px solid var(--accent-9);
       border-radius: 50%;
       width: 16px;
       height: 16px;
@@ -295,24 +45,31 @@
     }
   </style>
 </head>
-<body>
-  <div class="logo">
-    <img src="../assets/logo.png" alt="Academic Access Extension" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI1MCIgZmlsbD0iIzJjNmJlZCIvPjxwYXRoIGQ9Ik0zMCA3MEg3ME02NSAzMEw1MCA3ME0zNSAzMEw1MCA3MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4='">
-  </div>
-  <h1>Academic Access Extension</h1>
-  
-  <div class="container">
+<body class="radix-themes">
+  <div class="rt-Container p-4">
+    <div class="logo">
+      <img src="../assets/logo.png" alt="Academic Access Extension" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI1MCIgZmlsbD0iIzJjNmJlZCIvPjxwYXRoIGQ9Ik0zMCA3MEg3ME02NSAzMEw1MCA3ME0zNSAzMEw1MCA3MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4='">
+    </div>
+    <div class="rt-Flex direction="column" align="center" mb="4">
+      <div class="rt-Heading size="5" align="center">Academic Access Extension</div>
+    </div>
+    
     <!-- Setup Section -->
     <div id="setup-section">
-      <div class="card">
-        <div id="alert-box" class="alert alert-info hidden">
-          <span id="alert-message"></span>
+      <div class="rt-Card">
+        <div id="alert-box" class="rt-CalloutRoot hidden" size="2">
+          <div class="rt-CalloutIcon">
+            <div class="rt-CalloutIconWrapper">
+              <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C3.91015 1 1 3.91015 1 7.5C1 11.0899 3.91015 14 7.5 14C11.0899 14 14 11.0899 14 7.5C14 3.91015 11.0899 1 7.5 1ZM7.5 2C10.5376 2 13 4.46243 13 7.5C13 10.5376 10.5376 13 7.5 13C4.46243 13 2 10.5376 2 7.5C2 4.46243 4.46243 2 7.5 2ZM7.5 4.5C7.22386 4.5 7 4.72386 7 5V7.5C7 7.77614 7.22386 8 7.5 8C7.77614 8 8 7.77614 8 7.5V5C8 4.72386 7.77614 4.5 7.5 4.5ZM7 9.5C7 9.22386 7.22386 9 7.5 9C7.77614 9 8 9.22386 8 9.5C8 9.77614 7.77614 10 7.5 10C7.22386 10 7 9.77614 7 9.5Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            </div>
+          </div>
+          <div class="rt-CalloutText" id="alert-message"></div>
         </div>
         
-        <div id="university-select-container">
-          <div class="form-group">
-            <label for="university-select">Select your institution</label>
-            <select id="university-select">
+        <div id="university-select-container" class="rt-Flex direction="column" gap="3">
+          <div class="rt-Flex direction="column" gap="1" mt="3">
+            <label class="rt-Text size="2" weight="medium" as="label" htmlFor="university-select">Select your institution</label>
+            <select id="university-select" class="rt-Select">
               <option value="">-- Select your university --</option>
               <option value="michigan">University of Michigan</option>
               <option value="harvard">Harvard University</option>
@@ -327,37 +84,44 @@
             </select>
           </div>
           
-          <div id="custom-form" class="hidden">
-            <div class="form-group">
-              <label for="custom-name">Institution Name</label>
-              <input type="text" id="custom-name" placeholder="e.g., University of Example">
+          <div id="custom-form" class="hidden rt-Flex direction="column" gap="3" mt="3">
+            <div class="rt-Flex direction="column" gap="1">
+              <label class="rt-Text size="2" weight="medium" as="label" htmlFor="custom-name">Institution Name</label>
+              <input type="text" id="custom-name" class="rt-TextFieldInput" placeholder="e.g., University of Example">
             </div>
             
-            <div class="form-group">
-              <label for="custom-proxy">Proxy URL or Suffix</label>
-              <input type="text" id="custom-proxy" placeholder="e.g., https://proxy.example.edu/login?url= or .proxy.example.edu">
-              <small>Enter your institution's proxy URL prefix or domain suffix.</small>
+            <div class="rt-Flex direction="column" gap="1">
+              <label class="rt-Text size="2" weight="medium" as="label" htmlFor="custom-proxy">Proxy URL or Suffix</label>
+              <input type="text" id="custom-proxy" class="rt-TextFieldInput" placeholder="e.g., https://proxy.example.edu/login?url= or .proxy.example.edu">
+              <div class="rt-Text size="1" color="gray">Enter your institution's proxy URL prefix or domain suffix.</div>
             </div>
           </div>
           
-          <button id="save-button" class="btn btn-block mt-16">Save Settings</button>
+          <div class="rt-Flex justify="end" mt="4">
+            <button id="save-button" class="rt-Button">Save Settings</button>
+          </div>
         </div>
         
         <div id="success-message" class="hidden">
-          <div class="alert alert-success">
-            Your institution has been saved successfully!
+          <div class="rt-CalloutRoot variant="success" size="2" mb="3">
+            <div class="rt-CalloutIcon">
+              <div class="rt-CalloutIconWrapper">
+                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 1C3.91015 1 1 3.91015 1 7.5C1 11.0899 3.91015 14 7.5 14C11.0899 14 14 11.0899 14 7.5C14 3.91015 11.0899 1 7.5 1ZM7.5 2C10.5376 2 13 4.46243 13 7.5C13 10.5376 10.5376 13 7.5 13C4.46243 13 2 10.5376 2 7.5C2 4.46243 4.46243 2 7.5 2ZM7.07095 5.64645C7.33397 5.44118 7.72049 5.47234 7.94645 5.72095L9.94645 7.98761C10.1557 8.22111 10.1324 8.57487 9.89889 8.78411L7.89889 10.5079C7.64831 10.7309 7.26563 10.7157 7.03558 10.4738C6.80553 10.2319 6.80652 9.85041 7.03838 9.60953L8.68413 8.17445L6.99355 6.25261C6.76759 6.00401 6.79875 5.61749 7.07095 5.64645ZM4.99996 5.5C5.27611 5.5 5.49996 5.72386 5.49996 6V9C5.49996 9.27614 5.27611 9.5 4.99996 9.5C4.72382 9.5 4.49996 9.27614 4.49996 9V6C4.49996 5.72386 4.72382 5.5 4.99996 5.5Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+              </div>
+            </div>
+            <div class="rt-CalloutText">Your institution has been saved successfully!</div>
           </div>
           
-          <div class="institution-item">
-            <div class="institution-info">
-              <div class="institution-name" id="saved-institution-name"></div>
-              <div class="institution-url" id="saved-institution-proxy"></div>
+          <div class="rt-Card">
+            <div class="rt-Flex direction="column" gap="1">
+              <div class="rt-Text weight="medium" id="saved-institution-name"></div>
+              <div class="rt-Text size="1" color="gray" id="saved-institution-proxy"></div>
             </div>
           </div>
           
-          <div class="actions mt-16">
-            <button id="edit-button" class="btn btn-outline">Edit</button>
-            <button id="reset-button" class="btn btn-danger">Reset</button>
+          <div class="rt-Flex gap="3" justify="end" mt="4">
+            <button id="edit-button" class="rt-Button variant="outline">Edit</button>
+            <button id="reset-button" class="rt-Button color="ruby">Reset</button>
           </div>
         </div>
       </div>
