@@ -1,0 +1,230 @@
+/**
+ * Academic Access Extension - Content Styles
+ * 
+ * Styles for the extension's UI elements that are injected into websites.
+ * These styles are isolated with specific class names to avoid conflicts.
+ */
+
+/* Container for all extension UI elements */
+.academic-access-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  z-index: 2147483647; /* Highest z-index to ensure visibility */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  max-width: 90vw;
+  box-sizing: border-box;
+}
+
+/* Base notification styles */
+.academic-access-notification {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-left: 4px solid #2c6bed;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  animation: academic-access-slide-in 0.3s ease;
+}
+
+/* Animation for notification appearance */
+@keyframes academic-access-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation for notification disappearance */
+.academic-access-notification-hide {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Logo styling */
+.academic-access-logo {
+  width: 32px;
+  height: 32px;
+  background-color: #2c6bed;
+  border-radius: 50%;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIHJ4PSI1MCIgZmlsbD0iIzJjNmJlZCIvPjxwYXRoIGQ9Ik0zMCA3MEg3ME02NSAzMEw1MCA3ME0zNSAzMEw1MCA3MCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-self: flex-start;
+}
+
+/* Message text styling */
+.academic-access-message {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Actions container styling */
+.academic-access-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Button styling */
+.academic-access-button {
+  display: inline-block;
+  background-color: #2c6bed;
+  color: white;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.academic-access-button:hover {
+  background-color: #1d5cdb;
+  text-decoration: none;
+  color: white;
+}
+
+/* Dismiss button styling */
+.academic-access-dismiss {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.academic-access-dismiss:hover {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+/* Additional UI elements */
+
+/* Floating access button */
+.academic-access-floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #2c6bed;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 2147483646; /* One less than container */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.academic-access-floating-button:hover {
+  transform: scale(1.05);
+  background-color: #1d5cdb;
+}
+
+/* Info box styling */
+.academic-access-info-box {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Alert styles */
+.academic-access-alert {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.academic-access-alert-info {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #bbdefb;
+}
+
+.academic-access-alert-success {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #c8e6c9;
+}
+
+.academic-access-alert-warning {
+  background-color: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffe0b2;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+  .academic-access-container {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+  
+  .academic-access-notification {
+    padding: 12px;
+  }
+  
+  .academic-access-button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Avoid messing up dark mode sites */
+@media (prefers-color-scheme: dark) {
+  .academic-access-notification,
+  .academic-access-info-box {
+    background-color: #292929;
+    color: #eee;
+  }
+  
+  .academic-access-message {
+    color: #eee;
+  }
+  
+  .academic-access-dismiss {
+    color: #aaa;
+  }
+  
+  .academic-access-dismiss:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .academic-access-info-box {
+    background-color: #333;
+    border-color: #444;
+    color: #ccc;
+  }
+}

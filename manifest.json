@@ -1,0 +1,95 @@
+{
+  "manifest_version": 3,
+  "name": "Academic Access Extension",
+  "version": "1.0.0",
+  "description": "Access academic and media articles using your university library subscriptions",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webNavigation",
+    "scripting",
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "*://*.jstor.org/*",
+    "*://*.sciencedirect.com/*",
+    "*://*.springer.com/*",
+    "*://*.wiley.com/*",
+    "*://*.tandfonline.com/*",
+    "*://*.academic.oup.com/*",
+    "*://*.sagepub.com/*",
+    "*://*.ieeexplore.ieee.org/*",
+    "*://*.dl.acm.org/*",
+    "*://*.nature.com/*",
+    "*://*.economist.com/*",
+    "*://*.wsj.com/*",
+    "*://*.nytimes.com/*",
+    "*://*.ft.com/*",
+    "*://*.hbr.org/*",
+    "*://*.washingtonpost.com/*",
+    "*://*.doi.org/*",
+    "*://*.ncbi.nlm.nih.gov/*",
+    "*://*.pubmed.gov/*",
+    "*://*.arxiv.org/*"
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.jstor.org/*",
+        "*://*.sciencedirect.com/*",
+        "*://*.springer.com/*",
+        "*://*.wiley.com/*",
+        "*://*.tandfonline.com/*",
+        "*://*.academic.oup.com/*",
+        "*://*.sagepub.com/*",
+        "*://*.ieeexplore.ieee.org/*",
+        "*://*.dl.acm.org/*",
+        "*://*.nature.com/*",
+        "*://*.economist.com/*",
+        "*://*.wsj.com/*",
+        "*://*.nytimes.com/*",
+        "*://*.ft.com/*",
+        "*://*.hbr.org/*",
+        "*://*.washingtonpost.com/*",
+        "*://*.doi.org/*",
+        "*://*.ncbi.nlm.nih.gov/*",
+        "*://*.pubmed.gov/*",
+        "*://*.arxiv.org/*"
+      ],
+      "js": ["src/content-scripts/content.js"],
+      "css": ["src/content-scripts/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*",
+        "src/modules/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
