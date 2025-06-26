@@ -1,4 +1,4 @@
-# Clever: Paywall Bypass for Students
+# 🧠 Clever: Paywall Bypass for Students
 
 ![Academic Access Extension](assets/banner.png)
 
