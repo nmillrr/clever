@@ -1,8 +1,8 @@
 # 🧠 Clever: Paywall Bypass for Students
 
-![Academic Access Extension](assets/banner.png)
+Whenever I hit a paywall for an article during college, I would always try using Sci-Hub or archive.org to try and get through. I almost always forgot that my own university offered access to a bunch of different journals and research resources through the library system. 
 
-Whenever I hit a paywall for an article during college, I would always try using Sci-Hub or archive.org to try and get through. I almost always forgot that my own university offered access to a bunch of different journals and research resources through the library system. To help other students more easily get through these paywalls, I created browser extension that detects paywalled academic and media articles and checks if your university provides access via a library proxy. If access is available, it redirects you to the proxied version of the article. The extension also provides fallback to open access repositories when institutional access is unavailable.
+To help other students more easily get through these paywalls, I created browser extension that detects paywalled academic and media articles and checks if your university provides access via a library proxy. If access is available, it redirects you to the proxied version of the article. The extension also provides fallback to open access repositories when institutional access is unavailable.
 
 ## Features
 
