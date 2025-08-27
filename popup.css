@@ -1,0 +1,247 @@
+/* Import PT Mono font */
+@font-face {
+    font-family: 'PT Mono';
+    src: url('assets/PTMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Browser extension standard dimensions: 320px width, flexible height */
+body {
+    width: 320px;
+    min-height: 400px;
+    margin: 0;
+    padding: 0;
+    font-family: 'PT Mono', 'Courier New', monospace;
+    background-color: #f5f5f0;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+}
+
+.screen {
+    display: none;
+    padding: 24px;
+    min-height: 352px; /* 400px - 48px padding */
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Landing Page Styles */
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.logo-image {
+    width: 120px;
+    height: auto;
+    margin-bottom: 24px;
+}
+
+.brand-name {
+    font-size: 48px;
+    font-weight: 300;
+    color: #2d5016;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.primary-button {
+    background-color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 32px;
+    font-size: 16px;
+    color: #2d5016;
+    cursor: pointer;
+    margin-bottom: 40px;
+    min-width: 200px;
+    transition: box-shadow 0.2s ease;
+}
+
+.primary-button:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-link {
+    color: #2d5016;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* School Selection Styles */
+.header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.header h2 {
+    font-size: 20px;
+    font-weight: 400;
+    color: #2d5016;
+    margin: 0;
+}
+
+.schools-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.school-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.school-option:hover {
+    transform: translateY(-2px);
+}
+
+.school-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.bu-logo {
+    background-color: #cc0000;
+    color: white;
+}
+
+.nyu-logo {
+    background-color: #662d91;
+    font-size: 36px;
+}
+
+.stanford-logo {
+    background-color: #8c1515;
+    color: white;
+    position: relative;
+}
+
+.stanford-logo::before {
+    content: "🌲";
+    position: absolute;
+    font-size: 20px;
+    top: 8px;
+    right: 8px;
+}
+
+.uconn-logo {
+    background-color: #000e2f;
+    font-size: 36px;
+}
+
+.usc-logo {
+    background-color: #990000;
+    color: #ffcc00;
+}
+
+.yale-logo {
+    background-color: #0f4d92;
+    color: white;
+}
+
+.school-name {
+    font-size: 16px;
+    color: #2d5016;
+    font-weight: 500;
+}
+
+/* Confirmation Page Styles */
+.confirmation-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.selected-school {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.saved-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.checkmark {
+    background-color: #22c55e;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.saved-text {
+    color: #2d5016;
+    font-weight: 600;
+}
+
+.description {
+    text-align: center;
+    color: #2d5016;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 32px;
+    max-width: 260px;
+}
+
+.change-link {
+    color: #2d5016;
+    text-decoration: underline;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 320px) {
+    .screen {
+        padding: 16px;
+    }
+    
+    .schools-grid {
+        gap: 16px;
+        max-width: 240px;
+    }
+    
+    .school-logo {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+}

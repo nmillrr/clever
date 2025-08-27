@@ -1,0 +1,116 @@
+#clever-access-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    animation: cleverSlideIn 0.3s ease-out;
+}
+
+@keyframes cleverSlideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.clever-popup {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    width: 320px;
+    max-width: calc(100vw - 40px);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.clever-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+    color: white;
+}
+
+.clever-logo {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.clever-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.clever-close:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.clever-content {
+    padding: 20px;
+}
+
+.clever-content p {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.clever-access-btn {
+    background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.clever-access-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+.clever-access-btn:active {
+    transform: translateY(0);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+    #clever-access-button {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+    }
+    
+    .clever-popup {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+/* Ensure button appears above common website elements */
+#clever-access-button {
+    z-index: 999999 !important;
+}
