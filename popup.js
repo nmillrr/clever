@@ -11,35 +11,86 @@ document.addEventListener('DOMContentLoaded', function() {
         changeSchoolBtn: document.getElementById('changeSchoolBtn'),
         selectedLogo: document.getElementById('selectedLogo'),
         selectedName: document.getElementById('selectedName'),
-        schoolNameText: document.getElementById('schoolNameText')
+        confirmationFullText: document.getElementById('confirmationFullText')
     };
 
     function showScreen(screenName) {
-        Object.values(screens).forEach(screen => screen.classList.remove('active'));
-        screens[screenName].classList.add('active');
+        const currentScreen = document.querySelector('.screen.active');
+        
+        if (currentScreen && currentScreen !== screens[screenName]) {
+            // Fade out current screen
+            currentScreen.classList.add('fade-out');
+            
+            // After fade out completes, switch screens
+            setTimeout(() => {
+                // Clean up ALL screens first
+                Object.values(screens).forEach(screen => {
+                    screen.classList.remove('active', 'fade-out', 'fade-in');
+                    screen.style.display = 'none';
+                });
+                
+                // Show new screen and start fade in immediately
+                screens[screenName].classList.add('active');
+                screens[screenName].style.display = 'flex';
+                
+                // Small delay to ensure display change takes effect before fade in
+                requestAnimationFrame(() => {
+                    screens[screenName].classList.add('fade-in');
+                    
+                    // Clean up fade-in class after animation
+                    setTimeout(() => {
+                        screens[screenName].classList.remove('fade-in');
+                    }, 300);
+                });
+            }, 300);
+        } else if (!currentScreen) {
+            // First screen load
+            screens[screenName].classList.add('active');
+        }
     }
+    
 
     function saveSchool(schoolData) {
-        chrome.storage.sync.set({ selectedSchool: schoolData }, function() {
-            console.log('School saved:', schoolData);
-        });
+        if (typeof chrome !== 'undefined' && chrome.storage) {
+            chrome.storage.sync.set({ selectedSchool: schoolData }, function() {
+                console.log('School saved:', schoolData);
+            });
+        } else {
+            // For testing outside extension environment
+            localStorage.setItem('selectedSchool', JSON.stringify(schoolData));
+            console.log('School saved to localStorage:', schoolData);
+        }
     }
 
     function loadSavedSchool() {
-        chrome.storage.sync.get(['selectedSchool'], function(result) {
-            if (result.selectedSchool) {
-                showConfirmation(result.selectedSchool);
-                showScreen('confirmation');
-            }
-        });
+        if (typeof chrome !== 'undefined' && chrome.storage) {
+            chrome.storage.sync.get(['selectedSchool'], function(result) {
+                if (result.selectedSchool) {
+                    showConfirmation(result.selectedSchool);
+                    showScreen('confirmation');
+                }
+            });
+        }
+        // In test mode, just start with landing page (no action needed)
     }
 
     function showConfirmation(schoolData) {
-        elements.selectedLogo.className = `school-logo ${schoolData.logoClass}`;
-        elements.selectedLogo.textContent = schoolData.logoText;
+        // Clear any inline styles that might interfere
+        const confirmationContent = document.querySelector('.confirmation-content');
+        if (confirmationContent) {
+            confirmationContent.style.display = '';
+            confirmationContent.style.opacity = '';
+        }
+        
+        // Populate confirmation data
+        elements.selectedLogo.className = `confirmation-logo ${schoolData.logoClass}`;
         elements.selectedName.textContent = schoolData.displayName;
-        elements.schoolNameText.textContent = schoolData.name;
+        elements.confirmationFullText.textContent = `when you encounter an online paywall, clever will check ${schoolData.name}'s library to see if you have free student access.`;
+        
+        // Ensure change school handler is set up
+        setupChangeSchoolHandler();
     }
+    
 
     function getSchoolData(schoolName) {
         const schoolConfigs = {
@@ -78,20 +129,67 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayName: 'Yale',
                 logoClass: 'yale-logo',
                 logoText: 'Y'
+            },
+            'MIT': {
+                name: 'MIT',
+                displayName: 'MIT',
+                logoClass: 'mit-logo',
+                logoText: 'MIT'
+            },
+            'Harvard': {
+                name: 'Harvard',
+                displayName: 'Harvard',
+                logoClass: 'harvard-logo',
+                logoText: 'H'
+            },
+            'Princeton': {
+                name: 'Princeton',
+                displayName: 'Princeton',
+                logoClass: 'princeton-logo',
+                logoText: 'P'
+            },
+            'Columbia': {
+                name: 'Columbia',
+                displayName: 'Columbia',
+                logoClass: 'columbia-logo',
+                logoText: 'C'
+            },
+            'Cornell': {
+                name: 'Cornell',
+                displayName: 'Cornell',
+                logoClass: 'cornell-logo',
+                logoText: 'C'
+            },
+            'Brown': {
+                name: 'Brown',
+                displayName: 'Brown',
+                logoClass: 'brown-logo',
+                logoText: 'B'
             }
         };
         
         return schoolConfigs[schoolName];
     }
 
-    // Event listeners
-    elements.selectSchoolBtn.addEventListener('click', function() {
-        showScreen('schoolSelection');
-    });
 
-    elements.schoolOptions.forEach(option => {
-        option.addEventListener('click', function() {
-            const schoolName = this.dataset.school;
+    // Set up event handlers using proper event delegation
+    function setupEventHandlers() {
+        // School selection click handler
+        document.addEventListener('click', handleSchoolClick);
+        
+        // Select school button
+        if (elements.selectSchoolBtn) {
+            elements.selectSchoolBtn.addEventListener('click', handleSelectSchoolClick);
+        }
+        
+        // Change school button - set up when the confirmation screen shows
+        setupChangeSchoolHandler();
+    }
+    
+    function handleSchoolClick(e) {
+        const schoolOption = e.target.closest('.school-option');
+        if (schoolOption) {
+            const schoolName = schoolOption.dataset.school;
             const schoolData = getSchoolData(schoolName);
             
             if (schoolData) {
@@ -99,13 +197,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 showConfirmation(schoolData);
                 showScreen('confirmation');
             }
-        });
-    });
-
-    elements.changeSchoolBtn.addEventListener('click', function() {
+        }
+    }
+    
+    function handleSelectSchoolClick() {
         showScreen('schoolSelection');
-    });
+    }
+    
+    function handleChangeSchoolClick() {
+        resetSchoolSelection();
+        showScreen('schoolSelection');
+    }
+    
+    function resetSchoolSelection() {
+        const schoolsScrollable = document.querySelector('.schools-scrollable');
+        const confirmationContent = document.querySelector('.confirmation-content');
+        
+        // Make sure schools are visible
+        if (schoolsScrollable) {
+            schoolsScrollable.style.display = 'grid';
+            schoolsScrollable.style.opacity = '1';
+        }
+        
+        // Hide confirmation content
+        if (confirmationContent) {
+            confirmationContent.style.display = 'none';
+            confirmationContent.style.opacity = '0';
+        }
+    }
+    
+    function setupChangeSchoolHandler() {
+        if (elements.changeSchoolBtn) {
+            elements.changeSchoolBtn.removeEventListener('click', handleChangeSchoolClick);
+            elements.changeSchoolBtn.addEventListener('click', handleChangeSchoolClick);
+        }
+    }
+    
 
-    // Initialize
-    loadSavedSchool();
+    // Initialize application
+    function init() {
+        setupEventHandlers();
+        loadSavedSchool();
+    }
+    
+    // Start the application when DOM is ready
+    init();
 });

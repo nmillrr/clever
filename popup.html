@@ -10,65 +10,88 @@
     <div class="container">
         <!-- Landing Page -->
         <div id="landing" class="screen active">
-            <div class="logo-container">
-                <img src="assets/clever-logo.png" alt="Clever Logo" class="logo-image">
-                <h1 class="brand-name">clever</h1>
-            </div>
+            <img src="assets/clever-logo.png" alt="Clever Logo" class="logo-image">
+            <h1 class="brand-name">clever</h1>
             <button class="primary-button" id="selectSchoolBtn">select your school</button>
             <div class="about-link">about clever</div>
         </div>
 
         <!-- School Selection Page -->
         <div id="schoolSelection" class="screen">
-            <div class="header">
-                <h2>select your school</h2>
-            </div>
-            <div class="schools-grid">
-                <div class="school-option" data-school="Boston University">
-                    <div class="school-logo bu-logo">BU</div>
-                    <div class="school-name">BU</div>
+            <div class="school-selection-container">
+                <div class="school-selection-header">
+                    <h2>select your school</h2>
                 </div>
-                <div class="school-option" data-school="NYU">
-                    <div class="school-logo nyu-logo">🔥</div>
-                    <div class="school-name">NYU</div>
-                </div>
-                <div class="school-option" data-school="Stanford">
-                    <div class="school-logo stanford-logo">S</div>
-                    <div class="school-name">Stanford</div>
-                </div>
-                <div class="school-option" data-school="UConn">
-                    <div class="school-logo uconn-logo">🐺</div>
-                    <div class="school-name">UConn</div>
-                </div>
-                <div class="school-option" data-school="USC">
-                    <div class="school-logo usc-logo">SC</div>
-                    <div class="school-name">USC</div>
-                </div>
-                <div class="school-option" data-school="Yale">
-                    <div class="school-logo yale-logo">Y</div>
-                    <div class="school-name">Yale</div>
+                <div class="schools-scrollable">
+                    <div class="school-option" data-school="Boston University">
+                        <div class="school-logo bu-logo"></div>
+                        <div class="school-name">BU</div>
+                    </div>
+                    <div class="school-option" data-school="NYU">
+                        <div class="school-logo nyu-logo"></div>
+                        <div class="school-name">NYU</div>
+                    </div>
+                    <div class="school-option" data-school="Stanford">
+                        <div class="school-logo stanford-logo"></div>
+                        <div class="school-name">Stanford</div>
+                    </div>
+                    <div class="school-option" data-school="UConn">
+                        <div class="school-logo uconn-logo"></div>
+                        <div class="school-name">UConn</div>
+                    </div>
+                    <div class="school-option" data-school="USC">
+                        <div class="school-logo usc-logo"></div>
+                        <div class="school-name">USC</div>
+                    </div>
+                    <div class="school-option" data-school="Yale">
+                        <div class="school-logo yale-logo"></div>
+                        <div class="school-name">Yale</div>
+                    </div>
+                    <div class="school-option" data-school="MIT">
+                        <div class="school-logo mit-logo"></div>
+                        <div class="school-name">MIT</div>
+                    </div>
+                    <div class="school-option" data-school="Harvard">
+                        <div class="school-logo harvard-logo"></div>
+                        <div class="school-name">Harvard</div>
+                    </div>
+                    <div class="school-option" data-school="Princeton">
+                        <div class="school-logo princeton-logo"></div>
+                        <div class="school-name">Princeton</div>
+                    </div>
+                    <div class="school-option" data-school="Columbia">
+                        <div class="school-logo columbia-logo"></div>
+                        <div class="school-name">Columbia</div>
+                    </div>
+                    <div class="school-option" data-school="Cornell">
+                        <div class="school-logo cornell-logo"></div>
+                        <div class="school-name">Cornell</div>
+                    </div>
+                    <div class="school-option" data-school="Brown">
+                        <div class="school-logo brown-logo"></div>
+                        <div class="school-name">Brown</div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Confirmation Page -->
         <div id="confirmation" class="screen">
-            <div class="header">
-                <h2>select your school</h2>
-            </div>
-            <div class="confirmation-content">
-                <div class="selected-school">
-                    <div id="selectedLogo" class="school-logo"></div>
-                    <div id="selectedName" class="school-name"></div>
+            <div class="school-selection-container">
+                <div class="school-selection-header">
+                    <h2>select your school</h2>
                 </div>
-                <div class="saved-indicator">
-                    <span class="checkmark">✓</span>
-                    <span class="saved-text">saved!</span>
+                <div class="confirmation-content">
+                    <div id="selectedLogo" class="confirmation-logo"></div>
+                    <div id="selectedName" class="confirmation-school-name"></div>
+                    <div class="saved-indicator">
+                        <span class="saved-text">✅ saved!</span>
+                    </div>
+                    <div class="confirmation-description">
+                        <span id="confirmationFullText">when you encounter an online paywall, clever will check UConn's library to see if you have free student access.</span>
+                    </div>
+                    <div class="change-link" id="changeSchoolBtn">change schools</div>
                 </div>
-                <div class="description">
-                    when you encounter an online paywall, clever will check <span id="schoolNameText"></span>'s library to see if you have free student access.
-                </div>
-                <div class="change-link" id="changeSchoolBtn">change schools</div>
             </div>
         </div>
     </div>

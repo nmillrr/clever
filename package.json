@@ -1,0 +1,12 @@
+{
+  "name": "clever-extension",
+  "version": "1.0.0",
+  "description": "Browser extension for accessing student library resources",
+  "scripts": {
+    "build": "echo 'No build process needed for vanilla extension'"
+  },
+  "dependencies": {
+    "framer-motion": "^10.16.16"
+  },
+  "devDependencies": {}
+}
