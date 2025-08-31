@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Populate confirmation data
         elements.selectedLogo.className = `confirmation-logo ${schoolData.logoClass}`;
+        elements.selectedLogo.innerHTML = `<img src="${schoolData.svgPath}" alt="${schoolData.displayName} Logo" class="confirmation-svg">`;
         elements.selectedName.textContent = schoolData.displayName;
         elements.confirmationFullText.textContent = `when you encounter an online paywall, clever will check ${schoolData.name}'s library to see if you have free student access.`;
         
@@ -92,83 +93,65 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
+    // School database - easy to add new schools
+    const SCHOOLS = [
+        {
+            name: 'Boston University',
+            displayName: 'BU',
+            logoClass: 'bu-logo',
+            svgPath: 'assets/school-logos/bu.svg'
+        },
+        {
+            name: 'Northeastern University',
+            displayName: 'Northeastern',
+            logoClass: 'northeastern-logo',
+            svgPath: 'assets/school-logos/northeastern.svg'
+        },
+        {
+            name: 'NYU',
+            displayName: 'NYU',
+            logoClass: 'nyu-logo',
+            svgPath: 'assets/school-logos/nyu.svg'
+        },
+        {
+            name: 'UConn',
+            displayName: 'UConn',
+            logoClass: 'uconn-logo',
+            svgPath: 'assets/school-logos/uconn.svg'
+        },
+        {
+            name: 'UMass',
+            displayName: 'UMass',
+            logoClass: 'umass-logo',
+            svgPath: 'assets/school-logos/umass.svg'
+        },
+        {
+            name: 'USC',
+            displayName: 'USC',
+            logoClass: 'usc-logo',
+            svgPath: 'assets/school-logos/usc.svg'
+        }
+    ];
+    
     function getSchoolData(schoolName) {
-        const schoolConfigs = {
-            'Boston University': {
-                name: 'Boston University',
-                displayName: 'BU',
-                logoClass: 'bu-logo',
-                logoText: 'BU'
-            },
-            'NYU': {
-                name: 'NYU',
-                displayName: 'NYU',
-                logoClass: 'nyu-logo',
-                logoText: '🔥'
-            },
-            'Stanford': {
-                name: 'Stanford',
-                displayName: 'Stanford',
-                logoClass: 'stanford-logo',
-                logoText: 'S'
-            },
-            'UConn': {
-                name: 'UConn',
-                displayName: 'UConn',
-                logoClass: 'uconn-logo',
-                logoText: '🐺'
-            },
-            'USC': {
-                name: 'USC',
-                displayName: 'USC',
-                logoClass: 'usc-logo',
-                logoText: 'SC'
-            },
-            'Yale': {
-                name: 'Yale',
-                displayName: 'Yale',
-                logoClass: 'yale-logo',
-                logoText: 'Y'
-            },
-            'MIT': {
-                name: 'MIT',
-                displayName: 'MIT',
-                logoClass: 'mit-logo',
-                logoText: 'MIT'
-            },
-            'Harvard': {
-                name: 'Harvard',
-                displayName: 'Harvard',
-                logoClass: 'harvard-logo',
-                logoText: 'H'
-            },
-            'Princeton': {
-                name: 'Princeton',
-                displayName: 'Princeton',
-                logoClass: 'princeton-logo',
-                logoText: 'P'
-            },
-            'Columbia': {
-                name: 'Columbia',
-                displayName: 'Columbia',
-                logoClass: 'columbia-logo',
-                logoText: 'C'
-            },
-            'Cornell': {
-                name: 'Cornell',
-                displayName: 'Cornell',
-                logoClass: 'cornell-logo',
-                logoText: 'C'
-            },
-            'Brown': {
-                name: 'Brown',
-                displayName: 'Brown',
-                logoClass: 'brown-logo',
-                logoText: 'B'
-            }
-        };
+        return SCHOOLS.find(school => school.name === schoolName || school.displayName === schoolName);
+    }
+    
+    function generateSchoolsHTML() {
+        // Sort schools alphabetically by display name
+        const sortedSchools = [...SCHOOLS].sort((a, b) => a.displayName.localeCompare(b.displayName));
         
-        return schoolConfigs[schoolName];
+        const schoolsContainer = document.querySelector('.schools-scrollable');
+        if (schoolsContainer) {
+            schoolsContainer.innerHTML = sortedSchools.map(school => `
+                <div class="school-option" data-school="${school.name}">
+                    <div class="school-logo ${school.logoClass}">
+                        <img src="${school.svgPath}" alt="${school.displayName} Logo" class="school-svg">
+                    </div>
+                    <div class="school-name">${school.displayName}</div>
+                </div>
+            `).join('');
+        }
     }
 
 
@@ -236,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize application
     function init() {
+        generateSchoolsHTML();
         setupEventHandlers();
         loadSavedSchool();
     }

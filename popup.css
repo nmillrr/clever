@@ -165,7 +165,7 @@ body {
     transform: translateX(-50%);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 0px;
     width: 280px;
     height: 400px;
     overflow-y: auto;
@@ -197,67 +197,32 @@ body {
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    margin-bottom: 8px;
+    height: 140px;
 }
 
 .school-logo {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 24px;
-    color: white;
     margin-bottom: 8px;
+    padding: 4px;
+    box-sizing: border-box;
 }
 
-.bu-logo {
-    background-color: #cc0000;
+.school-svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: filter 0.2s ease;
+    filter: brightness(0) saturate(100%) invert(50%); /* Default gray */
 }
 
-.nyu-logo {
-    background-color: #662d91;
-}
-
-.stanford-logo {
-    background-color: #8c1515;
-}
-
-.uconn-logo {
-    background-color: #000e2f;
-}
-
-.usc-logo {
-    background-color: #990000;
-}
-
-.yale-logo {
-    background-color: #0f4d92;
-}
-
-.mit-logo {
-    background-color: #750014;
-}
-
-.harvard-logo {
-    background-color: #a41034;
-}
-
-.princeton-logo {
-    background-color: #ee7f2d;
-}
-
-.columbia-logo {
-    background-color: #b9d9eb;
-}
-
-.cornell-logo {
-    background-color: #b31b1b;
-}
-
-.brown-logo {
-    background-color: #4e3629;
+.school-option:hover .school-svg {
+    filter: brightness(0) saturate(100%) invert(0%); /* Black on hover */
 }
 
 /* Confirmation Page Styles */
@@ -276,7 +241,20 @@ body {
     width: 140px;
     height: 140px;
     border-radius: 8px;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.confirmation-svg {
+    max-width: 140px;
+    max-height: 140px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
 .confirmation-school-name {
@@ -328,6 +306,8 @@ body {
     color: #2d5016;
     font-weight: 500;
     font-family: 'PT Mono', 'Courier New', monospace;
+    margin: 0;
+    line-height: 1;
 }
 
 
