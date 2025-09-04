@@ -1,53 +1,43 @@
-// University library access data
-const UNIVERSITY_DATA = [
-    // Boston University
-    { university: 'Boston University', domain: 'wsj.com', proxyUrl: 'https://ezproxy.bu.edu/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'Boston University', domain: 'nytimes.com', proxyUrl: 'https://ezproxy.bu.edu/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'Boston University', domain: 'economist.com', proxyUrl: 'https://ezproxy.bu.edu/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'Boston University', domain: 'theatlantic.com', proxyUrl: 'https://ezproxy.bu.edu/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    { university: 'Boston University', domain: 'ft.com', proxyUrl: 'https://ezproxy.bu.edu/login?url=https://www.ft.com/', displayName: 'Financial Times' },
+// CSV parsing functionality
+let universityDatabases = [];
+
+// Function to parse CSV data
+function parseCSV(csvText) {
+    const lines = csvText.split('\n');
+    const headers = lines[0].split(',');
+    const data = [];
     
-    // NYU
-    { university: 'NYU', domain: 'wsj.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'NYU', domain: 'nytimes.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'NYU', domain: 'economist.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'NYU', domain: 'theatlantic.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    { university: 'NYU', domain: 'ft.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.ft.com/', displayName: 'Financial Times' },
-    { university: 'NYU', domain: 'washingtonpost.com', proxyUrl: 'https://proxy.library.nyu.edu/login?url=https://www.washingtonpost.com/', displayName: 'Washington Post' },
+    for (let i = 1; i < lines.length; i++) {
+        if (lines[i].trim() === '') continue;
+        
+        const values = lines[i].split(',');
+        const row = {};
+        
+        headers.forEach((header, index) => {
+            row[header.trim()] = values[index] ? values[index].trim() : '';
+        });
+        
+        // Only include rows with valid real_url
+        if (row.real_url && row.real_url !== '') {
+            data.push(row);
+        }
+    }
     
-    // Stanford
-    { university: 'Stanford', domain: 'wsj.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'Stanford', domain: 'nytimes.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'Stanford', domain: 'economist.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'Stanford', domain: 'theatlantic.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    { university: 'Stanford', domain: 'ft.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.ft.com/', displayName: 'Financial Times' },
-    { university: 'Stanford', domain: 'washingtonpost.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.washingtonpost.com/', displayName: 'Washington Post' },
-    { university: 'Stanford', domain: 'nature.com', proxyUrl: 'https://stanford.idm.oclc.org/login?url=https://www.nature.com/', displayName: 'Nature' },
-    
-    // UConn
-    { university: 'UConn', domain: 'wsj.com', proxyUrl: 'https://search.lib.uconn.edu/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'UConn', domain: 'nytimes.com', proxyUrl: 'https://search.lib.uconn.edu/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'UConn', domain: 'economist.com', proxyUrl: 'https://search.lib.uconn.edu/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'UConn', domain: 'theatlantic.com', proxyUrl: 'https://search.lib.uconn.edu/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    
-    // USC
-    { university: 'USC', domain: 'wsj.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'USC', domain: 'nytimes.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'USC', domain: 'economist.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'USC', domain: 'theatlantic.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    { university: 'USC', domain: 'ft.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.ft.com/', displayName: 'Financial Times' },
-    { university: 'USC', domain: 'washingtonpost.com', proxyUrl: 'https://libproxy.usc.edu/login?url=https://www.washingtonpost.com/', displayName: 'Washington Post' },
-    
-    // Yale
-    { university: 'Yale', domain: 'wsj.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.wsj.com/', displayName: 'Wall Street Journal' },
-    { university: 'Yale', domain: 'nytimes.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.nytimes.com/', displayName: 'New York Times' },
-    { university: 'Yale', domain: 'economist.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.economist.com/', displayName: 'The Economist' },
-    { university: 'Yale', domain: 'theatlantic.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.theatlantic.com/', displayName: 'The Atlantic' },
-    { university: 'Yale', domain: 'ft.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.ft.com/', displayName: 'Financial Times' },
-    { university: 'Yale', domain: 'washingtonpost.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.washingtonpost.com/', displayName: 'Washington Post' },
-    { university: 'Yale', domain: 'nature.com', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.nature.com/', displayName: 'Nature' },
-    { university: 'Yale', domain: 'science.org', proxyUrl: 'https://proxy.library.yale.edu/login?url=https://www.science.org/', displayName: 'Science' }
-];
+    return data;
+}
+
+// Function to load CSV data
+async function loadCSVData() {
+    try {
+        const response = await fetch(chrome.runtime.getURL('master_databases.csv'));
+        const csvText = await response.text();
+        universityDatabases = parseCSV(csvText);
+        console.log('Loaded university databases:', universityDatabases.length, 'entries');
+    } catch (error) {
+        console.error('Error loading CSV data:', error);
+        universityDatabases = [];
+    }
+}
 
 // Function to extract domain from URL
 function extractDomain(url) {
@@ -59,11 +49,45 @@ function extractDomain(url) {
     }
 }
 
+// Map frontend school names to CSV university codes
+function getUniversityCode(schoolName) {
+    const schoolMapping = {
+        'Northeastern University': 'NEU',
+        'UConn': 'UConn',
+        'Boston University': 'BU',
+        'NYU': 'NYU', 
+        'UMass': 'UMass',
+        'USC': 'USC'
+    };
+    return schoolMapping[schoolName] || schoolName;
+}
+
 // Function to check if user has access to current site
 function checkAccess(userSchool, currentDomain) {
-    return UNIVERSITY_DATA.find(entry => 
-        entry.university === userSchool && entry.domain === currentDomain
-    );
+    const universityCode = getUniversityCode(userSchool);
+    // Find matching database entry using 'university' column for multi-school support
+    return universityDatabases.find(entry => {
+        if (entry.university !== universityCode) return false;
+        
+        // Extract domain from real_url
+        const entryDomain = extractDomain(entry.real_url);
+        if (!entryDomain) return false;
+        
+        // Check for exact domain match or subdomain match
+        return currentDomain === entryDomain || 
+               currentDomain.endsWith('.' + entryDomain) ||
+               entryDomain.endsWith('.' + currentDomain);
+    });
+}
+
+// Function to get all domains for a user's school
+function getSchoolDomains(userSchool) {
+    const universityCode = getUniversityCode(userSchool);
+    return universityDatabases
+        .filter(entry => entry.university === universityCode)
+        .map(entry => extractDomain(entry.real_url))
+        .filter(domain => domain !== null)
+        .filter((domain, index, self) => self.indexOf(domain) === index); // Remove duplicates
 }
 
 // Listen for messages from content script
@@ -88,4 +112,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
         return true; // Required for async response
     }
+    
+    if (request.action === 'getSchoolDomains') {
+        chrome.storage.sync.get(['selectedSchool'], function(result) {
+            if (result.selectedSchool) {
+                const domains = getSchoolDomains(result.selectedSchool.name);
+                sendResponse({ domains: domains });
+            } else {
+                sendResponse({ domains: [] });
+            }
+        });
+        return true;
+    }
 });
+
+// Load CSV data when extension starts
+chrome.runtime.onStartup.addListener(loadCSVData);
+chrome.runtime.onInstalled.addListener(loadCSVData);
+
+// Load data immediately if extension is already running
+loadCSVData();

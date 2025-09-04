@@ -1,15 +1,123 @@
-#clever-access-button {
+/* Clever popup icon styles */
+#clever-popup-icon {
     position: fixed;
-    top: 20px;
+    top: 20%;
     right: 20px;
-    z-index: 10000;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    animation: cleverSlideIn 0.3s ease-out;
+    z-index: 999999;
+    font-family: 'PT Mono', 'Courier New', monospace;
+    animation: slideInFromRight 0.3s ease-out;
 }
 
-@keyframes cleverSlideIn {
+.clever-icon-container {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.clever-icon-container:hover {
+    transform: scale(1.05);
+}
+
+.clever-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.clever-close-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    border: none;
+    background: #ff4757;
+    color: white;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease;
+}
+
+.clever-close-btn:hover {
+    background: #ff3742;
+}
+
+.clever-tooltip {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.clever-icon-container:hover + .clever-tooltip,
+.clever-tooltip:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.clever-tooltip-header {
+    font-size: 16px;
+    color: #2d5016;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.clever-tooltip-text {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.clever-access-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background: #2d5016;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-family: 'PT Mono', 'Courier New', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clever-access-btn:hover {
+    background: #1e3710;
+}
+
+/* Animation for icon appearance */
+@keyframes slideInFromRight {
     from {
-        transform: translateX(100%);
+        transform: translateX(100px);
         opacity: 0;
     }
     to {
@@ -18,99 +126,25 @@
     }
 }
 
-.clever-popup {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    width: 320px;
-    max-width: calc(100vw - 40px);
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-}
-
-.clever-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
-    color: white;
-}
-
-.clever-logo {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-.clever-close {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-}
-
-.clever-close:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.clever-content {
-    padding: 20px;
-}
-
-.clever-content p {
-    margin: 0 0 16px 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #374151;
-}
-
-.clever-access-btn {
-    background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.2s ease;
-}
-
-.clever-access-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
-}
-
-.clever-access-btn:active {
-    transform: translateY(0);
-}
-
 /* Mobile responsive */
 @media (max-width: 480px) {
-    #clever-access-button {
-        top: 10px;
+    #clever-popup-icon {
+        top: 15%;
         right: 10px;
-        left: 10px;
     }
     
-    .clever-popup {
-        width: 100%;
-        max-width: none;
+    .clever-icon-container {
+        width: 56px;
+        height: 56px;
     }
-}
-
-/* Ensure button appears above common website elements */
-#clever-access-button {
-    z-index: 999999 !important;
+    
+    .clever-icon {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .clever-tooltip {
+        width: 260px;
+        right: -90px;
+    }
 }

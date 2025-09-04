@@ -1,78 +1,73 @@
-// Paywall detection keywords and patterns
-const PAYWALL_INDICATORS = [
-    'subscribe', 'subscription', 'paywall', 'premium', 'member', 'sign up',
-    'free trial', 'unlimited access', 'digital subscription', 'continue reading',
-    'create account', 'register now', 'unlock', 'exclusive content'
-];
-
-// Sites that commonly have paywalls
-const PAYWALL_SITES = [
-    'wsj.com', 'nytimes.com', 'economist.com', 'theatlantic.com',
-    'ft.com', 'washingtonpost.com', 'nature.com', 'science.org'
-];
-
-let cleverButton = null;
+let cleverPopupIcon = null;
 let isChecking = false;
+let schoolDomains = [];
 
-// Function to check if current site has paywall indicators
-function detectPaywall() {
-    const currentDomain = window.location.hostname.replace('www.', '');
-    
-    // Check if it's a known paywall site
-    if (!PAYWALL_SITES.includes(currentDomain)) {
-        return false;
+// Helper function to extract domain name from URL
+function extractDomainFromUrl(url) {
+    try {
+        const domain = new URL(url).hostname.replace('www.', '');
+        return domain.charAt(0).toUpperCase() + domain.slice(1).replace('.com', '');
+    } catch (e) {
+        return 'this resource';
     }
-    
-    // Look for paywall-related text in the page
-    const bodyText = document.body.innerText.toLowerCase();
-    const hasPaywallText = PAYWALL_INDICATORS.some(keyword => 
-        bodyText.includes(keyword.toLowerCase())
-    );
-    
-    // Look for common paywall UI elements
-    const paywallSelectors = [
-        '[class*="paywall"]',
-        '[class*="subscription"]',
-        '[class*="premium"]',
-        '[id*="paywall"]',
-        '[data-testid*="paywall"]',
-        '.meter-count',
-        '.article-count'
-    ];
-    
-    const hasPaywallElements = paywallSelectors.some(selector => 
-        document.querySelector(selector) !== null
-    );
-    
-    return hasPaywallText || hasPaywallElements;
 }
 
-// Function to create and show the Clever access button
-function showCleverButton(accessInfo, school) {
-    // Remove existing button if present
-    if (cleverButton) {
-        cleverButton.remove();
+// Function to get school domains from background
+function loadSchoolDomains() {
+    chrome.runtime.sendMessage({
+        action: 'getSchoolDomains'
+    }, function(response) {
+        if (response && response.domains) {
+            schoolDomains = response.domains;
+            console.log('Loaded school domains:', schoolDomains);
+        }
+    });
+}
+
+// Function to check if current domain is in school's database
+function isSchoolDomain() {
+    const currentDomain = window.location.hostname.replace('www.', '');
+    return schoolDomains.some(domain => 
+        currentDomain === domain || currentDomain.endsWith('.' + domain)
+    );
+}
+
+// Function to create and show the Clever popup icon
+function showCleverIcon(accessInfo, school) {
+    // Remove existing icon if present
+    if (cleverPopupIcon) {
+        cleverPopupIcon.remove();
     }
     
-    // Create button container
-    cleverButton = document.createElement('div');
-    cleverButton.id = 'clever-access-button';
-    cleverButton.innerHTML = `
-        <div class="clever-popup">
-            <div class="clever-header">
-                <div class="clever-logo">clever</div>
-                <button class="clever-close" onclick="this.closest('#clever-access-button').remove()">×</button>
-            </div>
-            <div class="clever-content">
-                <p><strong>${school.displayName}</strong> students have free access to <strong>${accessInfo.displayName}</strong></p>
-                <button class="clever-access-btn" onclick="window.open('${accessInfo.proxyUrl}', '_blank')">
-                    Access via ${school.displayName} Library
+    // Create popup icon
+    cleverPopupIcon = document.createElement('div');
+    cleverPopupIcon.id = 'clever-popup-icon';
+    cleverPopupIcon.innerHTML = `
+        <div class="clever-icon-container">
+            <img src="${chrome.runtime.getURL('assets/clever-popup-icon.png')}" alt="Clever" class="clever-icon">
+            <button class="clever-close-btn" onclick="this.closest('#clever-popup-icon').remove()">×</button>
+        </div>
+        <div class="clever-tooltip">
+            <div class="clever-tooltip-content">
+                <div class="clever-tooltip-header">
+                    <strong>clever</strong>
+                </div>
+                <div class="clever-tooltip-text">
+                    <strong>${school.displayName}</strong> students have free access to <strong>${accessInfo.database_name || extractDomainFromUrl(accessInfo.real_url)}</strong>
+                </div>
+                <button class="clever-access-btn" onclick="window.open('${accessInfo.guide_url}', '_blank')">
+                    Access via ${school.displayName} Library →
                 </button>
             </div>
         </div>
     `;
     
-    document.body.appendChild(cleverButton);
+    document.body.appendChild(cleverPopupIcon);
+    
+    // Add click handler for the icon (not the close button)
+    cleverPopupIcon.querySelector('.clever-icon-container .clever-icon').addEventListener('click', function() {
+        window.open(accessInfo.guide_url, '_blank');
+    });
 }
 
 // Function to check access with background script
@@ -87,30 +82,31 @@ function checkAccessWithBackground() {
         isChecking = false;
         
         if (response && response.hasAccess && response.accessInfo) {
-            showCleverButton(response.accessInfo, response.school);
+            showCleverIcon(response.accessInfo, response.school);
         }
     });
 }
 
 // Function to initialize clever functionality
 function initClever() {
-    // Only run on sites that might have paywalls
-    const currentDomain = window.location.hostname.replace('www.', '');
-    if (!PAYWALL_SITES.includes(currentDomain)) {
-        return;
-    }
+    // Load school domains first
+    loadSchoolDomains();
     
-    // Check for paywalls and show button if access is available
-    if (detectPaywall()) {
-        checkAccessWithBackground();
-    }
-    
-    // Also check periodically in case paywall appears dynamically
-    setInterval(() => {
-        if (detectPaywall() && !cleverButton) {
+    // Small delay to ensure domains are loaded
+    setTimeout(() => {
+        // Only run on sites that are in the school's database
+        if (isSchoolDomain()) {
             checkAccessWithBackground();
         }
-    }, 3000);
+    }, 500);
+}
+
+// Function to clean up when navigating away
+function cleanup() {
+    if (cleverPopupIcon) {
+        cleverPopupIcon.remove();
+        cleverPopupIcon = null;
+    }
 }
 
 // Wait for page to load then initialize
@@ -120,21 +116,20 @@ if (document.readyState === 'loading') {
     initClever();
 }
 
-// Re-check when page content changes (for SPAs)
-const observer = new MutationObserver((mutations) => {
-    let shouldCheck = false;
-    mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            shouldCheck = true;
-        }
-    });
-    
-    if (shouldCheck && detectPaywall() && !cleverButton) {
-        setTimeout(checkAccessWithBackground, 1000);
+// Handle navigation changes (for SPAs)
+let currentUrl = window.location.href;
+const urlObserver = new MutationObserver(() => {
+    if (currentUrl !== window.location.href) {
+        cleanup();
+        currentUrl = window.location.href;
+        setTimeout(initClever, 1000);
     }
 });
 
-observer.observe(document.body, {
+urlObserver.observe(document.body, {
     childList: true,
     subtree: true
 });
+
+// Clean up when page unloads
+window.addEventListener('beforeunload', cleanup);

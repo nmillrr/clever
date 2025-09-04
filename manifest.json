@@ -22,8 +22,14 @@
     "default_title": "Clever - University Library Access"
   },
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
+    "16": "assets/clever-logo.png",
+    "48": "assets/clever-logo.png",
+    "128": "assets/clever-logo.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["databases/*.csv", "assets/*.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
