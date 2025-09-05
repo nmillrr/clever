@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "description": "Access academic resources through your university's library subscriptions",
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "content_scripts": [
     {
