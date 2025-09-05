@@ -9,11 +9,11 @@ When you encounter a paywall on sites like The Wall Street Journal, New York Tim
 ## Supported Universities (MVP)
 
 - Boston University (BU)
+- Northeastern University (NEU)
 - New York University (NYU) 
-- Stanford University
 - University of Connecticut (UConn)
+- University of Massachusetts (UMass)
 - University of Southern California (USC)
-- Yale University
 
 ## Supported Sites
 
@@ -76,4 +76,4 @@ clever/
 
 The extension is built with vanilla JavaScript, HTML, and CSS. No build process required - just load the files directly into Chrome.
 
-To add more universities or sites, update the `UNIVERSITY_DATA` array in `background.js` with the new proxy URLs.
+To add more universities or sites, update `master_databases.csv` with the new proxy URLs.
