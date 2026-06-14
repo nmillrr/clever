@@ -140,20 +140,27 @@ if (document.readyState === 'loading') {
     initClever();
 }
 
-// Handle navigation changes (for SPAs)
+// Handle navigation changes (for SPAs). A content script runs in an isolated
+// world, so it can't intercept the page's own history.pushState calls. The
+// previous approach observed every DOM mutation on document.body, which taxes
+// busy pages. Instead we listen for the navigation events that DO reach our
+// window (popstate/hashchange) and add a low-frequency poll as a fallback for
+// pushState-based routing — far cheaper than a per-mutation callback.
 let currentUrl = window.location.href;
-const urlObserver = new MutationObserver(() => {
-    if (currentUrl !== window.location.href) {
-        cleanup();
-        currentUrl = window.location.href;
-        setTimeout(initClever, 1000);
-    }
-});
 
-urlObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-});
+function handleUrlChange() {
+    if (currentUrl === window.location.href) return;
+    cleanup();
+    currentUrl = window.location.href;
+    setTimeout(initClever, 1000);
+}
+
+window.addEventListener('popstate', handleUrlChange);
+window.addEventListener('hashchange', handleUrlChange);
+const urlPollInterval = setInterval(handleUrlChange, 1000);
 
 // Clean up when page unloads
-window.addEventListener('beforeunload', cleanup);
+window.addEventListener('beforeunload', () => {
+    clearInterval(urlPollInterval);
+    cleanup();
+});
