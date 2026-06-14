@@ -1,28 +1,61 @@
 // CSV parsing functionality
 let universityDatabases = [];
 
+// Split a single CSV line into fields, honoring double-quoted values that may
+// contain commas or escaped ("") quotes.
+function parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (inQuotes) {
+            if (char === '"') {
+                if (line[i + 1] === '"') {
+                    current += '"';
+                    i++; // skip the escaped quote
+                } else {
+                    inQuotes = false;
+                }
+            } else {
+                current += char;
+            }
+        } else if (char === '"') {
+            inQuotes = true;
+        } else if (char === ',') {
+            values.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    values.push(current);
+    return values;
+}
+
 // Function to parse CSV data
 function parseCSV(csvText) {
     const lines = csvText.split('\n');
-    const headers = lines[0].split(',');
+    const headers = parseCSVLine(lines[0]).map(h => h.trim());
     const data = [];
-    
+
     for (let i = 1; i < lines.length; i++) {
         if (lines[i].trim() === '') continue;
-        
-        const values = lines[i].split(',');
+
+        const values = parseCSVLine(lines[i]);
         const row = {};
-        
+
         headers.forEach((header, index) => {
-            row[header.trim()] = values[index] ? values[index].trim() : '';
+            row[header] = values[index] ? values[index].trim() : '';
         });
-        
+
         // Only include rows with valid real_url
         if (row.real_url && row.real_url !== '') {
             data.push(row);
         }
     }
-    
+
     return data;
 }
 

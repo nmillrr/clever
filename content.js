@@ -39,35 +39,59 @@ function showCleverIcon(accessInfo, school) {
         cleverPopupIcon.remove();
     }
     
-    // Create popup icon
+    const resourceName = accessInfo.database_name || extractDomainFromUrl(accessInfo.real_url);
+
+    // Build the popup with DOM APIs (not innerHTML) so untrusted CSV values
+    // are inserted as text and can never inject markup or break out of handlers.
     cleverPopupIcon = document.createElement('div');
     cleverPopupIcon.id = 'clever-popup-icon';
-    cleverPopupIcon.innerHTML = `
-        <div class="clever-icon-container">
-            <img src="${chrome.runtime.getURL('assets/clever-popup-icon.png')}" alt="Clever" class="clever-icon">
-            <button class="clever-close-btn" onclick="this.closest('#clever-popup-icon').remove()">×</button>
-        </div>
-        <div class="clever-tooltip">
-            <div class="clever-tooltip-content">
-                <div class="clever-tooltip-header">
-                    <strong>clever</strong>
-                </div>
-                <div class="clever-tooltip-text">
-                    <strong>${school.displayName}</strong> students have free access to <strong>${accessInfo.database_name || extractDomainFromUrl(accessInfo.real_url)}</strong>
-                </div>
-                <button class="clever-access-btn" onclick="window.open('${accessInfo.guide_url}', '_blank')">
-                    Access via ${school.displayName} Library →
-                </button>
-            </div>
-        </div>
-    `;
-    
+
+    const iconContainer = document.createElement('div');
+    iconContainer.className = 'clever-icon-container';
+
+    const icon = document.createElement('img');
+    icon.src = chrome.runtime.getURL('assets/clever-popup-icon.png');
+    icon.alt = 'Clever';
+    icon.className = 'clever-icon';
+    icon.addEventListener('click', () => window.open(accessInfo.guide_url, '_blank'));
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'clever-close-btn';
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', cleanup);
+
+    iconContainer.append(icon, closeBtn);
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'clever-tooltip';
+
+    const tooltipContent = document.createElement('div');
+    tooltipContent.className = 'clever-tooltip-content';
+
+    const header = document.createElement('div');
+    header.className = 'clever-tooltip-header';
+    const headerStrong = document.createElement('strong');
+    headerStrong.textContent = 'clever';
+    header.appendChild(headerStrong);
+
+    const text = document.createElement('div');
+    text.className = 'clever-tooltip-text';
+    const schoolStrong = document.createElement('strong');
+    schoolStrong.textContent = school.displayName;
+    const resourceStrong = document.createElement('strong');
+    resourceStrong.textContent = resourceName;
+    text.append(schoolStrong, ' students have free access to ', resourceStrong);
+
+    const accessBtn = document.createElement('button');
+    accessBtn.className = 'clever-access-btn';
+    accessBtn.textContent = `Access via ${school.displayName} Library →`;
+    accessBtn.addEventListener('click', () => window.open(accessInfo.guide_url, '_blank'));
+
+    tooltipContent.append(header, text, accessBtn);
+    tooltip.appendChild(tooltipContent);
+    cleverPopupIcon.append(iconContainer, tooltip);
+
     document.body.appendChild(cleverPopupIcon);
-    
-    // Add click handler for the icon (not the close button)
-    cleverPopupIcon.querySelector('.clever-icon-container .clever-icon').addEventListener('click', function() {
-        window.open(accessInfo.guide_url, '_blank');
-    });
 }
 
 // Function to check access with background script
@@ -116,20 +140,27 @@ if (document.readyState === 'loading') {
     initClever();
 }
 
-// Handle navigation changes (for SPAs)
+// Handle navigation changes (for SPAs). A content script runs in an isolated
+// world, so it can't intercept the page's own history.pushState calls. The
+// previous approach observed every DOM mutation on document.body, which taxes
+// busy pages. Instead we listen for the navigation events that DO reach our
+// window (popstate/hashchange) and add a low-frequency poll as a fallback for
+// pushState-based routing — far cheaper than a per-mutation callback.
 let currentUrl = window.location.href;
-const urlObserver = new MutationObserver(() => {
-    if (currentUrl !== window.location.href) {
-        cleanup();
-        currentUrl = window.location.href;
-        setTimeout(initClever, 1000);
-    }
-});
 
-urlObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-});
+function handleUrlChange() {
+    if (currentUrl === window.location.href) return;
+    cleanup();
+    currentUrl = window.location.href;
+    setTimeout(initClever, 1000);
+}
+
+window.addEventListener('popstate', handleUrlChange);
+window.addEventListener('hashchange', handleUrlChange);
+const urlPollInterval = setInterval(handleUrlChange, 1000);
 
 // Clean up when page unloads
-window.addEventListener('beforeunload', cleanup);
+window.addEventListener('beforeunload', () => {
+    clearInterval(urlPollInterval);
+    cleanup();
+});

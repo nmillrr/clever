@@ -27,7 +27,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["databases/*.csv", "assets/*.png"],
+      "resources": ["master_databases.csv", "assets/*.png"],
       "matches": ["<all_urls>"]
     }
   ]
